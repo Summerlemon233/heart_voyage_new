@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:wechat_assets_picker/wechat_assets_picker.dart';
+
 import './about_us.dart';
 import './friend.dart';
 import './login.dart';
-import 'package:wechat_assets_picker/wechat_assets_picker.dart';
-
-import './common_widgets.dart';
 import './userdata.dart';
 import 'change_avatar.dart';
 import 'common_image.dart';
@@ -40,10 +39,14 @@ class _settingsState extends State<settings> {
     var _readPhotoPath_avatar_var = readPhotoPath_avatar();
     bool _isSelectedAvatar = !(PhotoPath_avatar[0] == "");
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 252, 223, 215),
+
       //backgroundColor: Color.fromRGBO(229, 220, 203, 1),
       appBar: AppBar(
         //backgroundColor: Color.fromRGBO(45, 73, 104, 1),
         //foregroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 255, 189, 177),
+        foregroundColor: Colors.white,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -62,31 +65,54 @@ class _settingsState extends State<settings> {
       body: ListView(
         children: [
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-          GestureDetector(
-            child: Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.width * 0.2,
-                    width: MediaQuery.of(context).size.width * 0.2,
-                    child: _isSelectedAvatar
-                        ? Avatar(image: imageFromFile(PhotoPath_avatar[0]).image)
-                        : Avatar(image: AssetImage('assets/images/not_login.png')),
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.2,),
-                  Text("${basicData['username']}",style: TextStyle(fontSize: 20),),
-                ],
-              ),
+          Container(
+            padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
+            margin: EdgeInsets.fromLTRB(12, 5, 12, 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.width * 0.2,
+                  width: MediaQuery.of(context).size.width * 0.2,
+                  child: GestureDetector(
+                      child: _isSelectedAvatar
+                          ? Avatar(
+                              image: imageFromFile(PhotoPath_avatar[0]).image)
+                          : Avatar(
+                              image: AssetImage('assets/images/not_login.png')),
+                      onTap: () {
+                        setState(() {
+                          Get.to(change_avatar());
+                        });
+                      }),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.2,
+                ),
+                Text(
+                  "${basicData['username']}",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
             ),
-            onTap: () {
-              setState(() {
-                Get.to(change_avatar());
-              });
-            },
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.5),
+                  blurRadius: 10.0,
+                  spreadRadius: 0.0,
+                  blurStyle: BlurStyle.outer,
+                  offset: Offset.zero,
+                ),
+              ],
+              borderRadius: BorderRadius.circular(25),
+            ),
           ),
+
           SizedBox(height: MediaQuery.of(context).size.height * 0.02),
           Divider(),
+
           ListTile(
             leading: Icon(Icons.people),
             title: Text('我的好友'),

@@ -7,6 +7,92 @@ import '../system/common_image.dart';
 import '../system/userdata.dart';
 import '../system/userdata_func.dart';
 
+class imgSelecterWidget extends StatefulWidget {
+  const imgSelecterWidget({super.key});
+
+  //bool isSelectedImg;
+  @override
+  State<imgSelecterWidget> createState() => _imgSelecterWidgetState();
+}
+
+class _imgSelecterWidgetState extends State<imgSelecterWidget> {
+  late Key _key = UniqueKey();
+
+  //Widget.
+  bool isSelectedImg = (selectedAsset_mood == null);
+  int successPressCount = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    print('build:$successPressCount');
+    return GestureDetector(
+        key: _key,
+        onTap: () {
+          setState(() {
+            selectPhoto_mood(context, basicData['note_case']);
+            /*print('isRanToHere');
+            print(diarySelectRes.value);*/
+            if (diarySelectRes.value) {
+              successPressCount++;
+              print(successPressCount);
+              print(diarySelectRes);
+            }
+            isSelectedImg = (selectedAsset_mood == null);
+            _key = UniqueKey();
+          });
+        },
+        child: Container(
+          margin: EdgeInsets.fromLTRB(5, 5, 5, 2),
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: 360,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          alignment: Alignment.center,
+          child: Obx(() => diarySelectRes.isFalse
+              ? Center(
+                  child: Text(
+                    "点击选择图片",
+                    style: TextStyle(color: Colors.black),
+                  ),
+                )
+              : Column(
+                  children: [
+                    Container(
+                      //key: UniqueKey(),
+                      /*child: AssetEntityImage(selectedAsset_mood!,
+                              isOriginal: true),*/
+                      height: 300,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          image: DecorationImage(
+                              image: AssetEntityImageProvider(
+                                  selectedAsset_mood!,
+                                  isOriginal: true),
+                              fit: BoxFit.cover)),
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                              Color.fromARGB(255, 252, 223, 215)),
+                          foregroundColor:
+                          MaterialStateProperty.all(Colors.white),
+                        ),
+                        onPressed: (){
+                          setState(() {
+                            diarySelectRes.value = false;
+                          });
+                        },
+                        child: Text("清除已选择的图片"),
+                      ),
+                    )
+                  ],
+                )),
+        ));
+  }
+}
+
 class new_diary extends StatefulWidget {
   const new_diary({Key? key}) : super(key: key);
 
@@ -15,6 +101,10 @@ class new_diary extends StatefulWidget {
 }
 
 class _new_diaryState extends State<new_diary> {
+  //late Key _key = UniqueKey();
+  //AssetEntity? selectedAsset_mood;
+  StateSetter? imgState;
+
   final titleController = TextEditingController();
   final contextController = TextEditingController();
   bool isSaved_mood = false;
@@ -235,10 +325,60 @@ class _new_diaryState extends State<new_diary> {
                   SizedBox(
                     height: 5,
                   ),
-                  Container(
+                  imgSelecterWidget(),
+
+                  /* StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState) {
+                      imgState = setState;
+                      isSaved_mood = (selectedAsset_mood == null);
+                      print(isSaved_mood);
+
+                      return Container(
+                          margin: EdgeInsets.fromLTRB(5, 5, 5, 2),
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          height: 300,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.center,
+                          child: isSaved_mood
+                              ? TextButton(
+                                  onPressed: () {
+                                    imgState!(() {
+                                      selectPhoto_mood(
+                                          context, basicData['note_case']);
+                                    });
+                                    imgState!(() {});
+                                  },
+                                  child: Text(
+                                    "点击选择图片\n再次点击以刷新",
+                                    style: TextStyle(color: Colors.black),
+                                  ))
+                              : GestureDetector(
+                                  onTap: () {
+                                    imgState!(() {
+                                      selectPhoto_mood(
+                                          context, basicData["note_case"]);
+                                    });
+                                  },
+                                  child: Container(
+                                    */ /*child: AssetEntityImage(selectedAsset_mood!,
+                              isOriginal: true),*/ /*
+                                    height: 300,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15),
+                                        image: DecorationImage(
+                                            image: AssetEntityImageProvider(
+                                                selectedAsset_mood!,
+                                                isOriginal: true),
+                                            fit: BoxFit.cover)),
+                                  )));
+                    },
+                  ),*/
+                  /*Container(
                       margin: EdgeInsets.fromLTRB(5, 5, 5, 2),
                       width: MediaQuery.of(context).size.width * 0.9,
-                      height: 200,
+                      height: 300,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -263,17 +403,17 @@ class _new_diaryState extends State<new_diary> {
                                 });
                               },
                               child: Container(
-                                /*child: AssetEntityImage(selectedAsset_mood!,
-                              isOriginal: true),*/
-                                height: 200,
+                                */ /*child: AssetEntityImage(selectedAsset_mood!,
+                              isOriginal: true),*/ /*
+                                height: 300,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     image: DecorationImage(
                                         image: AssetEntityImageProvider(
                                             selectedAsset_mood!,
                                             isOriginal: true),
-                                        fit: BoxFit.fill)),
-                              ))),
+                                        fit: BoxFit.cover)),
+                              ))),*/
                   SizedBox(
                     height: 10,
                   ),
@@ -359,35 +499,40 @@ class _new_diaryState extends State<new_diary> {
                 ],
               ),
             ),
-            isSaved_mood == false
-                ? ElevatedButton(
-                    onPressed: () {
-                      if (selectedAsset_mood == null) {
-                        Get.snackbar('提示', '您还未选择图片，请重新选择。',
-                            duration: Duration(milliseconds: 800));
-                      } else {
-                        setState(() {
-                          saveMoodData();
-                          saveBasicData();
-
-                          Get.snackbar('提示', '保存成功~',
+            Container(
+              padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+              child: isSaved_mood == false
+                  ? ElevatedButton(
+                      onPressed: () {
+                        if (selectedAsset_mood == null) {
+                          Get.snackbar('提示', '您还未选择图片，请重新选择。',
                               duration: Duration(milliseconds: 800));
-                        });
-                      }
-                    },
-                    child: Text('保存'))
-                : ElevatedButton(
-                    onPressed: () {
-                      selectedAsset_mood == null;
-                      Get.back();
-                    },
-                    child: Text('返回'),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                          Color.fromARGB(255, 252, 223, 215)),
-                      foregroundColor: MaterialStateProperty.all(Colors.white),
+                        } else {
+                          setState(() {
+                            saveMoodData();
+                            saveBasicData();
+
+                            Get.snackbar('提示', '保存成功~',
+                                duration: Duration(milliseconds: 800));
+                          });
+                        }
+                      },
+                      child: Text('保存'))
+                  : ElevatedButton(
+                      onPressed: () {
+                        selectedAsset_mood == null;
+                        Get.back();
+                      },
+                      child: Text('返回'),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Color.fromARGB(255, 252, 223, 215)),
+                        foregroundColor:
+                            MaterialStateProperty.all(Colors.white),
+                      ),
                     ),
-                  ),
+            ),
+
             /*Container(
               height: MediaQuery.of(context).size.height * 1.5,
               decoration: BoxDecoration(
@@ -472,6 +617,9 @@ class _new_diaryState extends State<new_diary> {
                 ),
               ),
             ),*/
+            SizedBox(
+              height: 40,
+            ),
           ],
         ));
   }

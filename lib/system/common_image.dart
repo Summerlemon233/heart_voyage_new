@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path/path.dart';
@@ -18,9 +19,11 @@ AssetEntity? selectedAsset;
 AssetEntity? selectedAsset_mood;
 AssetEntity? selectedAsset_avatar;
 
+var diarySelectRes = false.obs;
+
 // 定义一个全局变量，用于存储照片路径
 List<String> photoPath = [];
-List<String> photoPath_mood = [];
+var photoPath_diary = [].obs;
 List<String> PhotoPath_avatar = [""];
 
 // 将照片路径List存入本地：
@@ -43,7 +46,7 @@ Future<void> readPhotoPath() async {
 }
 
 //mood_cache
-Future<void> savePhotoPath_mood(List<String> filePaths) async {
+Future<void> savePhotoPath_mood(List filePaths) async {
   final directory = await getApplicationDocumentsDirectory();
   final File file = File('${directory.path}/photoPaths_mood.txt');
   await file.writeAsString(filePaths.join('\n'));
@@ -55,8 +58,8 @@ Future<void> readPhotoPath_mood() async {
   final filePath = GetStorage().read('photoPath_mood');
   final File file = File(filePath);
   final content = await file.readAsString();
-  photoPath_mood = [];
-  photoPath_mood = content.split('\n');
+  photoPath_diary.value = [];
+  photoPath_diary.value = content.split('\n');
 }
 
 // 定义一个方法，用于选择一张照片，并将选中的照片转化为Image对象共预览
@@ -76,7 +79,7 @@ Future<void> selectPhoto(BuildContext context, int index) async {
   }
 }
 
-Future<void> selectPhoto_mood(BuildContext context, int index) async {
+Future<bool> selectPhoto_mood(BuildContext context, int index) async {
   // 调用wechat_assets_picker插件，设置最大选择数量为1，只允许选择图片类型
   final List<AssetEntity>? result = await AssetPicker.pickAssets(
     context,
@@ -86,10 +89,13 @@ Future<void> selectPhoto_mood(BuildContext context, int index) async {
     ),
   );
   // 如果有选择结果，则更新selectedAsset变量，并显示预览页面
+  diarySelectRes.value = (result != null);
   if (result != null) {
     selectedAsset_mood = result.first;
     savePhoto_mood(index);
+    return true;
   }
+  else return false;
 }
 
 // 定义一个方法，用于将选中的照片自命名以后写入设备内置目录，并添加文件路径到photoPath变量
@@ -121,8 +127,8 @@ Future<void> savePhoto_mood(int index) async {
     final File file = File('${directory!.path}/${index}_mood.$suffix');
     // 将数据写入文件，并将文件路径添加到photoPath变量
     await file.writeAsBytes(data);
-    photoPath_mood.add(file.path);
-    savePhotoPath_mood(photoPath_mood);
+    photoPath_diary.add(file.path);
+    savePhotoPath_mood(photoPath_diary.value);
   }
 }
 

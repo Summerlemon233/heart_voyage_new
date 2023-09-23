@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:get/get.dart';
+import 'package:heart_voyage_new/pet/message.dart';
+import 'package:heart_voyage_new/system/scan_test.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 import 'package:flutter/material.dart';
@@ -34,6 +36,14 @@ class _friendState extends State<friend> {
         .join();
   }
 
+  String generateQR(){
+    String _name = basicData['username'];
+    String _motto = basicData['motto'];
+    String _code = _myCode;
+    String _res = _name + '#' + _motto + '#' + _code;
+    return _res;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,7 +54,16 @@ class _friendState extends State<friend> {
           foregroundColor: Colors.white,
           //backgroundColor: Color.fromRGBO(45, 73, 104, 1),
           //foregroundColor: Colors.white,
-          title: Text('我的好友')),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('我的好友'),
+              IconButton(onPressed: (){
+                Get.to(message());
+              }, icon: Icon(Icons.mail)),
+            ],
+          ),
+          ),
       body: Container(
         //padding: const EdgeInsets.all(16.0),
         child: ListView(
@@ -139,12 +158,26 @@ class _friendState extends State<friend> {
                     ),
                     Center(
                       child: QrImageView(
-                        data: _myCode,
+                        data: generateQR(),
                         version: QrVersions.auto,
                         size: 200.0,
                       ),
                     ),
                     ElevatedButton(onPressed: (){
+                      Get.to(CustomizedMode());
+                    }, child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        //Icon(Icons.person_add_alt_1),
+                        Text(
+                          "添加好友",
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),],
+                    ),),
+                    /*ElevatedButton(onPressed: (){
                       Get.to(add_friend());
                     }, child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -157,7 +190,7 @@ class _friendState extends State<friend> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),],
-                    ),),
+                    ),),*/
                     SizedBox(
                       height: 10,
                     )

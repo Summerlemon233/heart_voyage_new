@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 
-
-
-
 class about_us extends StatefulWidget {
   const about_us({Key? key}) : super(key: key);
 
@@ -14,9 +11,13 @@ class _about_usState extends State<about_us> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 252, 223, 215),
+
       //backgroundColor: Color.fromRGBO(229, 220, 203, 1),
       appBar: AppBar(
-          backgroundColor: Color.fromRGBO(45, 73, 104, 1),
+          //backgroundColor: Color.fromRGBO(45, 73, 104, 1),
+          //foregroundColor: Colors.white,
+          backgroundColor: Color.fromARGB(255, 255, 189, 177),
           foregroundColor: Colors.white,
           title: Text('关于我们')),
       body: SafeArea(
@@ -40,10 +41,13 @@ class _about_usState extends State<about_us> {
                           "心旅",
                           style: TextStyle(fontSize: 30),
                         ),
-                        Text(
-                          "Version 0.3.0 预览版 \n2023/04/22",
-                          style: TextStyle(
-                              fontSize: 20, fontFamily: 'Helvetica_Neue'),
+                        Center(
+                          child: Text(
+                            "Version 1.0.0 预览版 \n2023/09/17",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 20, fontFamily: 'Helvetica_Neue'),
+                          ),
                         ),
                         Text(
                           "开发者：反内卷小队\n",
@@ -59,9 +63,7 @@ class _about_usState extends State<about_us> {
                               fontSize: 15, fontFamily: 'Helvetica_Neue'),
                         ),
                       ],
-                    )
-                )
-            ),
+                    ))),
             ListTile(
               leading: Container(
                 child: CircleAvatar(
@@ -75,8 +77,12 @@ class _about_usState extends State<about_us> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
               ),
-              title: Text("odwaga.",style: TextStyle(fontFamily: 'Helvetica_Neue'),),
-            ),Divider(),
+              title: Text(
+                "odwaga.",
+                style: TextStyle(fontFamily: 'Helvetica_Neue'),
+              ),
+            ),
+            Divider(),
             ListTile(
               leading: Container(
                 child: CircleAvatar(
@@ -90,8 +96,12 @@ class _about_usState extends State<about_us> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
               ),
-              title: Text("宝铁.Botty",style: TextStyle(fontFamily: 'Helvetica_Neue'),),
-            ),Divider(),
+              title: Text(
+                "宝铁.Botty",
+                style: TextStyle(fontFamily: 'Helvetica_Neue'),
+              ),
+            ),
+            Divider(),
             ListTile(
               leading: Container(
                 child: CircleAvatar(
@@ -105,8 +115,12 @@ class _about_usState extends State<about_us> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
               ),
-              title: Text("梨pepe",style: TextStyle(fontFamily: 'Helvetica_Neue'),),
-            ),Divider(),
+              title: Text(
+                "梨pepe",
+                style: TextStyle(fontFamily: 'Helvetica_Neue'),
+              ),
+            ),
+            Divider(),
             ListTile(
               leading: Container(
                 child: CircleAvatar(
@@ -120,8 +134,12 @@ class _about_usState extends State<about_us> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
               ),
-              title: Text("Summer_柠檬",style: TextStyle(fontFamily: 'Helvetica_Neue'),),
-            ),Divider(),
+              title: Text(
+                "Summer_柠檬",
+                style: TextStyle(fontFamily: 'Helvetica_Neue'),
+              ),
+            ),
+            Divider(),
             ListTile(
               leading: Container(
                 child: CircleAvatar(
@@ -135,8 +153,12 @@ class _about_usState extends State<about_us> {
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                 ),
               ),
-              title: Text("YANGYU",style: TextStyle(fontFamily: 'Helvetica_Neue'),),
-            ),Divider(),
+              title: Text(
+                "YANGYU",
+                style: TextStyle(fontFamily: 'Helvetica_Neue'),
+              ),
+            ),
+            Divider(),
             Center(
               child: Text(
                 "App的GitHub页面：\nhttps://github.com/Summerlemon233/Heart_Voyage",
@@ -146,7 +168,7 @@ class _about_usState extends State<about_us> {
             ),
             Center(
               child: Text(
-                "本应用源码遵循MIT开源许可协议。\nSummer_lemon 3rd Software Project\nCopyright Summer_lemon 2023\n",
+                "本应用源码遵循MIT开源许可协议。\nSummer_lemon 5nd Software Project\nCopyright Summer_lemon 2023\n",
                 style: TextStyle(fontFamily: 'Helvetica_Neue'),
                 textAlign: TextAlign.center,
               ),

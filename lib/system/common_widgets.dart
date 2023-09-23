@@ -1,4 +1,7 @@
+//import 'dart:html' ;
+
 import 'package:flutter/material.dart';
+import 'package:heart_voyage_new/system/common_image.dart';
 import 'package:like_button/like_button.dart';
 
 String getDate() {
@@ -98,6 +101,7 @@ class momentCard extends StatelessWidget {
         //height: 128,
         alignment: Alignment.bottomRight,
         decoration: BoxDecoration(
+          color: Colors.white,
           boxShadow: [BoxShadow(
             color: Colors.black.withOpacity(0.5),
             blurRadius: 10.0,
@@ -145,13 +149,14 @@ class momentCard extends StatelessWidget {
               ),
             ),
             Container(
+              child: Image.asset(AssetPath,fit: BoxFit.contain,filterQuality: FilterQuality.high,),
               margin: EdgeInsets.fromLTRB(5, 5, 5, 2),
               width: MediaQuery.of(context).size.width * 0.9,
-              height: 200,
+              //height: 300,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: AssetImage(AssetPath), fit: BoxFit.fitWidth),
+                /*image: DecorationImage(
+                    image: AssetImage(AssetPath), fit: BoxFit.fitWidth),*/
               ),
             ),
             Container(
@@ -172,7 +177,137 @@ class momentCard extends StatelessWidget {
                 ),
                 LikeButton(likeCount: likes,),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.25,
+                  width: MediaQuery.of(context).size.width * 0.15,
+                ),
+                Text("发布于 ${province}   ${releaseTime}  ",style: TextStyle(
+                  color: Colors.black45,
+                ),),
+
+              ],
+            ),
+            SizedBox(height: 10,),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class myDiaryCard extends StatelessWidget {
+
+  final String AssetPath;
+  final VoidCallback onTapFunc;
+  final int unlock;
+  //final String AvatarPath;
+  //final String userName;
+  final String releaseTime;
+  final String textContent;
+  final String location;
+  final String province;
+  final int likes;
+
+  const myDiaryCard(
+      {Key? key,
+        required this.AssetPath,
+        required this.onTapFunc,
+        //required this.AvatarPath,
+        //required this.userName,
+        this.unlock = 0,
+        required this.releaseTime,
+        required this.textContent,
+        required this.location,
+        required this.province,
+        required this.likes})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTapFunc,
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.8,
+        margin: EdgeInsets.fromLTRB(15, 5, 15, 5),
+        padding: EdgeInsets.fromLTRB(5,10,5,10),
+        //height: 128,
+        alignment: Alignment.bottomRight,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [BoxShadow(
+            color: Colors.black.withOpacity(0.5),
+            blurRadius: 10.0,
+            spreadRadius: 0.0,
+            blurStyle: BlurStyle.outer,
+            offset: Offset.zero,
+          ),],
+          borderRadius: BorderRadius.circular(25),
+          border: Border.all(width: 1.0,color: Colors.black26),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 10,
+            ),
+            /*Container(
+              padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
+              width: MediaQuery.of(context).size.width,
+              height: 50,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  ClipOval(
+                    child: Image(
+                      image: AssetImage(AvatarPath),
+                    ),
+                  ),
+                  Text(userName,style: TextStyle(fontSize: 18),overflow: TextOverflow.ellipsis,),
+                ],
+              ),
+            ),*/
+            SizedBox(height: 10,),
+            Container(
+              height: 33,
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.location_on,size: 18,color: Colors.black45,),
+                  SizedBox(width: 8,),
+                  Text(location,style: TextStyle(
+                    color: Colors.black45,
+                  ),),
+                ],
+              ),
+            ),
+            Container(
+              child: imageFromFile(AssetPath),
+              margin: EdgeInsets.fromLTRB(5, 5, 5, 2),
+              width: MediaQuery.of(context).size.width * 0.9,
+              //height: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                /*image: DecorationImage(
+                    image: AssetImage(AssetPath), fit: BoxFit.fitWidth),*/
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(5, 15, 5, 2),
+              child: Text(textContent,maxLines:30,textAlign: TextAlign.justify,style: TextStyle(
+
+              ),),
+            ),
+
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.02,
+                ),
+                LikeButton(likeCount: likes,),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.15,
                 ),
                 Text("发布于 ${province}   ${releaseTime}  ",style: TextStyle(
                   color: Colors.black45,

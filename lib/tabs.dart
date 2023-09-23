@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:heart_voyage_new/pages/diary.dart';
+import 'package:heart_voyage_new/pages/meditation.dart';
 import 'package:heart_voyage_new/pages/pet.dart';
+import 'package:heart_voyage_new/pages/scale.dart';
+import 'package:heart_voyage_new/system/settings.dart';
+import 'package:heart_voyage_new/system/sign.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class tabs extends StatefulWidget {
   const tabs({super.key});
@@ -11,6 +16,13 @@ class tabs extends StatefulWidget {
 }
 
 class _tabsState extends State<tabs> {
+  @override
+  void initState() {
+    initializeDateFormatting();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,111 +34,61 @@ class _tabsState extends State<tabs> {
               scrollDirection: Axis.horizontal,
               children: [
                 Stack(
-                  children: [Image(image: AssetImage('assets/images/main_bkgnd.png')),
+                  children: [
+                    Image(image: AssetImage('assets/images/main_bkgnd.png')),
                     Positioned(
-                      left: MediaQuery.of(context).size.width * 0.44,
+                        left: MediaQuery.of(context).size.width * 0.44,
                         top: MediaQuery.of(context).size.height * 0.52,
                         child: GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             setState(() {
                               Get.to(pet());
                             });
-
                           },
                           child: Container(
                             height: 150,
                             width: 150,
                             decoration: BoxDecoration(
                                 image: DecorationImage(
-                                    image: AssetImage('assets/images/rabbit.png')
-                                )
-                            ),
+                                    image: AssetImage(
+                                        'assets/images/rabbit.png'))),
                           ),
                         )),
+                    Positioned(
+                        left: MediaQuery.of(context).size.width * 0.1,
+                        bottom: MediaQuery.of(context).size.height * 0.04,
+                        child:IconButton(
+
+                          onPressed: (){
+                            Get.to(settings());
+                          },
+                          icon: Icon(Icons.settings,size: 40,color: Colors.pink,),
+
+                          ),
+                        ),
                   ],
                 )
-
               ],
             ),
           ),
-          Positioned(child: Container(
-
-          )),
+          Positioned(child: Container()),
           Positioned(
-            left: 13,
-            //right: 5,
-            top: 25,
-            //bottom: 5,
-            child: GestureDetector(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(13),
-                    border: Border.all(
-                        color: Color.fromARGB(255, 111, 54, 34),
-                        width: 1.5
-                    )
-                ),
-                height: 60,
-                width: 60,
-                child: /*ElevatedButton(
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-              ),
-              onPressed: (){},
-              child: */
-                /*Container(
-                  height: 150,
-                  width: 150,
-                  child: */ListView(
-                  children: [
-                    SizedBox(
-                      height: 1,
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage('assets/images/sign_icon.png'),
-                            fit: BoxFit.contain),
-                      ),
-                      height: 40,
-                      width: 40,
-                    ),
-                    SizedBox(
-                      height: 2,
-                    ),
-                    Center(
-                      child: Text(
-                        "打  卡",
-                        style: TextStyle(
-                            fontFamily: 'Smiley Sans',
-                            color: Color.fromARGB(255, 111, 54, 34),
-                            fontSize: 11),
-                      ),
-
-                    )
-
-                  ],
-                ),
-              ),
-            )
-          ),
-          Positioned(
-              left: 100,
+              left: 13,
               //right: 5,
               top: 25,
               //bottom: 5,
               child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    Get.to(sign());
+                  });
+                },
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(13),
                       border: Border.all(
-                          color: Color.fromARGB(255, 111, 54, 34),
-                          width: 1.5
-                      )
-                  ),
+                          color: Color.fromARGB(255, 111, 54, 34), width: 1.5)),
                   height: 60,
                   width: 60,
                   child: /*ElevatedButton(
@@ -136,10 +98,11 @@ class _tabsState extends State<tabs> {
               ),
               onPressed: (){},
               child: */
-                  /*Container(
+                      /*Container(
                   height: 150,
                   width: 150,
-                  child: */ListView(
+                  child: */
+                      ListView(
                     children: [
                       SizedBox(
                         height: 1,
@@ -147,7 +110,53 @@ class _tabsState extends State<tabs> {
                       Container(
                         decoration: BoxDecoration(
                           image: DecorationImage(
-                              image: AssetImage('assets/images/meditation_icon.png'),
+                              image: AssetImage('assets/images/sign_icon.png'),
+                              fit: BoxFit.contain),
+                        ),
+                        height: 40,
+                        width: 40,
+                      ),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      Center(
+                        child: Text(
+                          "打  卡",
+                          style: TextStyle(
+                              fontFamily: 'Smiley Sans',
+                              color: Color.fromARGB(255, 111, 54, 34),
+                              fontSize: 11),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )),
+          Positioned(
+              left: 100,
+              //right: 5,
+              top: 25,
+              //bottom: 5,
+              child: GestureDetector(
+                onTap: () => Get.to(meditation()),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(13),
+                      border: Border.all(
+                          color: Color.fromARGB(255, 111, 54, 34), width: 1.5)),
+                  height: 60,
+                  width: 60,
+                  child: ListView(
+                    children: [
+                      SizedBox(
+                        height: 1,
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/meditation_icon.png'),
                               fit: BoxFit.contain),
                         ),
                         height: 40,
@@ -164,21 +173,18 @@ class _tabsState extends State<tabs> {
                               color: Color.fromARGB(255, 111, 54, 34),
                               fontSize: 11),
                         ),
-
                       )
-
                     ],
                   ),
                 ),
-              )
-          ),
+              )),
           Positioned(
               left: 187,
               //right: 5,
               top: 25,
               //bottom: 5,
               child: GestureDetector(
-                onTap: (){
+                onTap: () {
                   setState(() {
                     Get.to(diary());
                   });
@@ -188,10 +194,7 @@ class _tabsState extends State<tabs> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(13),
                       border: Border.all(
-                          color: Color.fromARGB(255, 111, 54, 34),
-                          width: 1.5
-                      )
-                  ),
+                          color: Color.fromARGB(255, 111, 54, 34), width: 1.5)),
                   height: 60,
                   width: 60,
                   child: /*ElevatedButton(
@@ -201,10 +204,11 @@ class _tabsState extends State<tabs> {
               ),
               onPressed: (){},
               child: */
-                  /*Container(
+                      /*Container(
                   height: 150,
                   width: 150,
-                  child: */ListView(
+                  child: */
+                      ListView(
                     children: [
                       SizedBox(
                         height: 1,
@@ -229,29 +233,28 @@ class _tabsState extends State<tabs> {
                               color: Color.fromARGB(255, 111, 54, 34),
                               fontSize: 11),
                         ),
-
                       )
-
                     ],
                   ),
                 ),
-              )
-          ),
+              )),
           Positioned(
               left: 274,
               //right: 5,
               top: 25,
               //bottom: 5,
               child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    Get.to(scale());
+                  });
+                },
                 child: Container(
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(13),
                       border: Border.all(
-                          color: Color.fromARGB(255, 111, 54, 34),
-                          width: 1.5
-                      )
-                  ),
+                          color: Color.fromARGB(255, 111, 54, 34), width: 1.5)),
                   height: 60,
                   width: 60,
                   child: /*ElevatedButton(
@@ -261,10 +264,11 @@ class _tabsState extends State<tabs> {
               ),
               onPressed: (){},
               child: */
-                  /*Container(
+                      /*Container(
                   height: 150,
                   width: 150,
-                  child: */ListView(
+                  child: */
+                      ListView(
                     children: [
                       SizedBox(
                         height: 1,
@@ -289,16 +293,11 @@ class _tabsState extends State<tabs> {
                               color: Color.fromARGB(255, 111, 54, 34),
                               fontSize: 11),
                         ),
-
                       )
-
                     ],
                   ),
                 ),
-              )
-          ),
-
-
+              )),
 
           //ElevatedButton(onPressed: (){}, child: Container()),
         ],
