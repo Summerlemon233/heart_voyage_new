@@ -6,7 +6,10 @@ import 'package:heart_voyage_new/pages/pet.dart';
 import 'package:heart_voyage_new/pages/scale.dart';
 import 'package:heart_voyage_new/system/settings.dart';
 import 'package:heart_voyage_new/system/sign.dart';
+import 'package:heart_voyage_new/system/userdata_func.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
+import 'pages/map.dart';
 
 class tabs extends StatefulWidget {
   const tabs({super.key});
@@ -37,6 +40,24 @@ class _tabsState extends State<tabs> {
                   children: [
                     Image(image: AssetImage('assets/images/main_bkgnd.png')),
                     Positioned(
+                        left: MediaQuery.of(context).size.width * 1.189,
+                        top: MediaQuery.of(context).size.height * 0.074,
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              Get.to(map());
+                            });
+                          },
+                          child: Container(
+                            height: 210,
+                            width: 150,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/map_object.png'))),
+                          ),
+                        )),
+                    Positioned(
                         left: MediaQuery.of(context).size.width * 0.44,
                         top: MediaQuery.of(context).size.height * 0.52,
                         child: GestureDetector(
@@ -55,17 +76,19 @@ class _tabsState extends State<tabs> {
                           ),
                         )),
                     Positioned(
-                        left: MediaQuery.of(context).size.width * 0.1,
-                        bottom: MediaQuery.of(context).size.height * 0.04,
-                        child:IconButton(
-
-                          onPressed: (){
-                            Get.to(settings());
-                          },
-                          icon: Icon(Icons.settings,size: 40,color: Colors.pink,),
-
-                          ),
+                      left: MediaQuery.of(context).size.width * 0.1,
+                      bottom: MediaQuery.of(context).size.height * 0.04,
+                      child: IconButton(
+                        onPressed: () {
+                          Get.to(settings());
+                        },
+                        icon: Icon(
+                          Icons.settings,
+                          size: 40,
+                          color: Colors.pink,
                         ),
+                      ),
+                    ),
                   ],
                 )
               ],
@@ -246,6 +269,7 @@ class _tabsState extends State<tabs> {
               child: GestureDetector(
                 onTap: () {
                   setState(() {
+                    init_data();
                     Get.to(scale());
                   });
                 },

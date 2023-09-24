@@ -122,6 +122,6 @@ Future<void> loadStarData() async {
 
 Future<void> init_data() async {
   loadBasicData();
-  readPhotoPath();
+  //readPhotoPath();
   readPhotoPath_mood();
 }

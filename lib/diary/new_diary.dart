@@ -28,18 +28,7 @@ class _imgSelecterWidgetState extends State<imgSelecterWidget> {
     return GestureDetector(
         key: _key,
         onTap: () {
-          setState(() {
-            selectPhoto_mood(context, basicData['note_case']);
-            /*print('isRanToHere');
-            print(diarySelectRes.value);*/
-            if (diarySelectRes.value) {
-              successPressCount++;
-              print(successPressCount);
-              print(diarySelectRes);
-            }
-            isSelectedImg = (selectedAsset_mood == null);
-            _key = UniqueKey();
-          });
+          setState(() {});
         },
         child: Container(
           margin: EdgeInsets.fromLTRB(5, 5, 5, 2),
@@ -49,14 +38,21 @@ class _imgSelecterWidgetState extends State<imgSelecterWidget> {
             borderRadius: BorderRadius.circular(10),
           ),
           alignment: Alignment.center,
-          child: Obx(() => diarySelectRes.isFalse
+          child: Obx(() => diarySelectRes.isFalse || (photoPath_diary.isEmpty)
               ? Center(
-                  child: Text(
-                    "点击选择图片",
-                    style: TextStyle(color: Colors.black),
+                  child: TextButton(
+                    child: Text(
+                      "点击选择图片",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    onPressed: () {
+                      selectPhoto_mood(context, basicData['note_case']);
+                      isSelectedImg = (selectedAsset_mood == null);
+                      _key = UniqueKey();
+                    },
                   ),
                 )
-              : Column(
+              : (Column(
                   children: [
                     Container(
                       //key: UniqueKey(),
@@ -77,18 +73,21 @@ class _imgSelecterWidgetState extends State<imgSelecterWidget> {
                           backgroundColor: MaterialStateProperty.all(
                               Color.fromARGB(255, 252, 223, 215)),
                           foregroundColor:
-                          MaterialStateProperty.all(Colors.white),
+                              MaterialStateProperty.all(Colors.white),
                         ),
-                        onPressed: (){
+                        onPressed: () {
                           setState(() {
                             diarySelectRes.value = false;
+                            //if(photoPath_diary.value.length > basicData['date_mood'].length) {
+                              photoPath_diary.value.removeLast();
+                            //}
                           });
                         },
                         child: Text("清除已选择的图片"),
                       ),
                     )
                   ],
-                )),
+                ))),
         ));
   }
 }
@@ -113,16 +112,25 @@ class _new_diaryState extends State<new_diary> {
   void saveMoodData() {
     int index = basicData["note_case"];
     //var rng = new Random();
-    DateTime now = DateTime.now();
-    String formattedDate = '${now.month}月${now.day}日 ${now.hour}:${now.minute}';
+    /*DateTime now = DateTime.now();
+    String formattedDate = '${now.month}月${now.day}日';*/
+    //获取当前的时间
+    DateTime date = DateTime.now();
+    //组合
+    // String formattedDate =
+    int formattedTime = date.millisecondsSinceEpoch;
+        //"${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}";
 
-    basicData['date_mood'][index] = formattedDate;
+    basicData['date_mood'].add(formattedTime);
+    //basicData['time_mood'][index] = formattedTime;
     basicData["location"][index] =
         initProvince + ' ' + initCity + ' ' + initTown;
     basicData["province"][index] = initProvince;
+    basicData["title_mood"][index] = titleController.text;
     basicData["context_mood"][index] = contextController.text;
-    basicData["note_case"]++;
+    basicData["note_case"] = basicData["date_mood"].length;
     isSaved_mood = true;
+    //saveBasicData();
   }
 
   void dispose() {
@@ -461,6 +469,31 @@ class _new_diaryState extends State<new_diary> {
                           offset: Offset.zero,
                         ),
                       ],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(width: 1.0, color: Colors.black26),
+                    ),
+                    margin: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                    padding: EdgeInsets.fromLTRB(8, 10, 8, 10),
+                    child: TextField(
+                      controller: titleController,
+                      //maxLines: 1,
+                      decoration: InputDecoration(
+                        hintText: "给日记起一个标题吧",
+                        //border: OutlineInputBorder()
+                      ),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.5),
+                          blurRadius: 10.0,
+                          spreadRadius: 0.0,
+                          blurStyle: BlurStyle.outer,
+                          offset: Offset.zero,
+                        ),
+                      ],
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(width: 1.0, color: Colors.black26),
                     ),
@@ -521,6 +554,7 @@ class _new_diaryState extends State<new_diary> {
                   : ElevatedButton(
                       onPressed: () {
                         selectedAsset_mood == null;
+                        diarySelectRes.value = false;
                         Get.back();
                       },
                       child: Text('返回'),
@@ -620,6 +654,7 @@ class _new_diaryState extends State<new_diary> {
             SizedBox(
               height: 40,
             ),
+            Obx(() => Text('${photoPath_diary.value}')),
           ],
         ));
   }

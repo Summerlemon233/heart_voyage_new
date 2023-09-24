@@ -4,9 +4,11 @@ import 'package:heart_voyage_new/diary/my_diary.dart';
 import 'package:heart_voyage_new/diary/new_diary.dart';
 import 'package:heart_voyage_new/system/common_image.dart';
 import 'package:heart_voyage_new/system/common_widgets.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../system/showdata.dart';
 import '../system/userdata.dart';
+import '../system/userdata_func.dart';
 
 class diary extends StatefulWidget {
   const diary({super.key});
@@ -16,24 +18,34 @@ class diary extends StatefulWidget {
 }
 
 class _diaryState extends State<diary> {
-  List<Widget> items = [
+  List<Widget> items = [];
 
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 252, 223, 215),
       appBar: AppBar(
-        title: Text('日记'),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('日记'),
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    init_data();
+                  });
+                },
+                icon: Icon(Icons.refresh))
+          ],
+        ),
         backgroundColor: Color.fromARGB(255, 255, 189, 177),
         foregroundColor: Colors.white,
       ),
       body: SafeArea(
         child: ListView(
           children: [
-            Obx(()=>Text('$basicData')),
-            Obx(() => Text('${photoPath_diary.value}')),
-
+            /*Obx(() => Text('$basicData')),
+            Obx(() => Text('${photoPath_diary.value}')),*/
             SizedBox(
               height: 10,
             ),
@@ -43,20 +55,22 @@ class _diaryState extends State<diary> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ElevatedButton(onPressed: (){
-
-                  }, child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Icon(Icons.book),
-                      Text(
-                        "最近添加的日记",
-                        style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Icon(Icons.book),
+                        Text(
+                          "最近添加的日记",
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),],
-                  ),),
+                      ],
+                    ),
+                  ),
                   /*Container(
                     alignment: Alignment.center,
                     height: 50,
@@ -70,14 +84,68 @@ class _diaryState extends State<diary> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),*/
-                  SizedBox(width: 20,),
-                  ElevatedButton(onPressed: (){
-                    Get.to(new_diary());
-                  }, child: Icon(Icons.add)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                      onPressed: () async {
+                        Map<Permission, PermissionStatus> statuses = await [
+                          Permission.storage,
+                          Permission.photos,
+                          //Permission.manageExternalStorage,
+                          Permission.mediaLibrary,
+                        ].request();
+                        if (await Permission.storage.isPermanentlyDenied) {
+                          Get.dialog(Column(
+                            children: [
+                              Text('storage'),
+                              ElevatedButton(onPressed: (){
+                                openAppSettings();
+                              }, child: Text(
+                                  '前往设置页面打开权限'
+                              ))
+                            ],
+                          ),);
+                          print('storageDenied');
+
+                        }
+                        else if (await Permission.photos.isDenied) {
+                          print('photoDenied');
+                          Get.dialog(Column(
+                            children: [
+                              Text('photo'),
+                              ElevatedButton(onPressed: (){
+                                openAppSettings();
+                              }, child: Text(
+                                  '前往设置页面打开权限'
+                              ))
+                            ],
+                          ),);
+                        }
+                        /*if (await Permission.manageExternalStorage.isDenied) {
+            print('externalStorageDenied');
+              openAppSettings();
+            }*/
+                        else if (await Permission.mediaLibrary.isDenied) {
+                          Get.dialog(Column(
+                            children: [
+                              Text('mediaLib'),
+                              ElevatedButton(onPressed: (){
+                                openAppSettings();
+                              }, child: Text(
+                                  '前往设置页面打开权限'
+                              ))
+                            ],
+                          ),);
+                          print('mediaLibDenied_ios');
+                          openAppSettings();
+                        }
+                        else Get.to(new_diary());
+                      },
+                      child: Icon(Icons.add)),
                 ],
               ),
             ),
-
             SizedBox(
               height: 10,
             ),
@@ -85,7 +153,27 @@ class _diaryState extends State<diary> {
                 color: Colors.black,
                 Area: '我的所有日记',
                 AssetPath: 'assets/images/notes.jpg',
-                onTapFunc: () {
+                onTapFunc: () async {
+                  /*Map<Permission, PermissionStatus> statuses = await [
+                    Permission.storage,
+                    Permission.photos,
+                    Permission.manageExternalStorage,
+                    Permission.mediaLibrary,
+                  ].request();
+                  if (await Permission.storage.isDenied) {
+                    openAppSettings();
+                  }
+                  if (await Permission.photos.isDenied) {
+                    openAppSettings();
+                  }
+                  if (await Permission.manageExternalStorage.isDenied) {
+                    openAppSettings();
+                  }
+                  if (await Permission.mediaLibrary.isDenied) {
+                    openAppSettings();
+                  }*/
+
+
                   setState(() {
                     readPhotoPath_mood();
                     Get.to(my_diary());
@@ -109,18 +197,22 @@ class _diaryState extends State<diary> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  ElevatedButton(onPressed: (){}, child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
-                      Icon(Icons.book),
-                      Text(
-                        "发现",
-                        style: TextStyle(
-                          fontSize: 23,
-                          fontWeight: FontWeight.bold,
+                  ElevatedButton(
+                    onPressed: () {},
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: <Widget>[
+                        Icon(Icons.book),
+                        Text(
+                          "发现",
+                          style: TextStyle(
+                            fontSize: 23,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),],
-                  ),),
+                      ],
+                    ),
+                  ),
                   /*Container(
                     alignment: Alignment.center,
                     height: 50,
@@ -134,8 +226,10 @@ class _diaryState extends State<diary> {
                       borderRadius: BorderRadius.circular(25),
                     ),
                   ),*/
-                  SizedBox(width: 20,),
-                  ElevatedButton(onPressed: (){}, child: Icon(Icons.refresh)),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(onPressed: () {}, child: Icon(Icons.refresh)),
                 ],
               ),
             ),
@@ -315,8 +409,64 @@ class _diaryState extends State<diary> {
       floatingActionButton: FloatingActionButton(
         shape: StadiumBorder(),
         onPressed: () {
-          setState(() {
-            Get.to(new_diary());
+          setState(() async {
+            Map<Permission, PermissionStatus> statuses = await [
+              Permission.storage,
+              Permission.photos,
+              //Permission.manageExternalStorage,
+              Permission.mediaLibrary,
+            ].request();
+            if (await Permission.storage.isDenied) {
+              Get.dialog(Column(
+                children: [
+                  Text('storage'),
+                  ElevatedButton(onPressed: (){
+                    openAppSettings();
+                  }, child: Text(
+                    '前往设置页面打开权限'
+                  ))
+                ],
+              ),);
+              print('storageDenied');
+
+            }
+            else if (await Permission.photos.isDenied) {
+            print('photoDenied');
+            Get.dialog(Column(
+              children: [
+                Text('photo'),
+                ElevatedButton(onPressed: (){
+                  openAppSettings();
+                }, child: Text(
+                    '前往设置页面打开权限'
+                ))
+              ],
+            ),);
+            }
+            /*if (await Permission.manageExternalStorage.isDenied) {
+            print('externalStorageDenied');
+              openAppSettings();
+            }*/
+            else if (await Permission.mediaLibrary.isDenied) {
+              Get.dialog(Column(
+                children: [
+                  Text('mediaLib'),
+                  ElevatedButton(onPressed: (){
+                    openAppSettings();
+                  }, child: Text(
+                      '前往设置页面打开权限'
+                  ))
+                ],
+              ),);
+              print('mediaLibDenied_ios');
+              openAppSettings();
+            }
+            else Get.to(new_diary());
+            print(statuses[Permission.storage]);
+            print(statuses[Permission.photos]);
+            print(statuses[Permission.manageExternalStorage]);
+            print(statuses[Permission.mediaLibrary]);
+
           });
         },
         child: Icon(Icons.add),

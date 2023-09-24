@@ -51,6 +51,7 @@ dependencies:
   intl: ^0.18.1
   just_audio: ^0.9.35
   flutter_easyrefresh: ^2.2.2
+  permission_handler: ^11.0.0
 
 
 dev_dependencies:
@@ -98,6 +99,9 @@ flutter:
     - family: Smiley Sans
       fonts:
         - asset: assets/fonts/SmileySans-Oblique.ttf
+    - family: Bahn
+      fonts:
+        - asset: assets/fonts/bahn.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

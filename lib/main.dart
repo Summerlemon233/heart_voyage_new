@@ -1,12 +1,21 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:heart_voyage_new/system/userdata_func.dart';
 import 'package:heart_voyage_new/tabs.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
   //debugPaintSizeEnabled = true;
+  DartPluginRegistrant.ensureInitialized();
+  //debugPaintSizeEnabled = true;
+  init_data();
+  await GetStorage.init();
 
   runApp(const MyApp());
 }
