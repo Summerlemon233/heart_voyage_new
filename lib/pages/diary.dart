@@ -97,47 +97,55 @@ class _diaryState extends State<diary> {
                           Permission.mediaLibrary,
                         ].request();
                         if (await Permission.storage.isPermanentlyDenied) {
-                          Get.dialog(Column(
-                            children: [
-                              Text('storage'),
-                              ElevatedButton(onPressed: (){
-                                openAppSettings();
-                              }, child: Text(
-                                  '前往设置页面打开权限'
-                              ))
-                            ],
-                          ),);
+                          Get.dialog(
+                            Container(
+                              child: Column(
+                                children: [
+                                  Text('您似乎拒绝了应用读写外部存储的系统权限。'),
+                                  ElevatedButton(onPressed: (){
+                                    openAppSettings();
+                                  }, child: Text(
+                                      '前往设置页面打开权限'
+                                  ))
+                                ],
+                              ),
+                            )
+                          );
                           print('storageDenied');
 
                         }
                         else if (await Permission.photos.isDenied) {
                           print('photoDenied');
-                          Get.dialog(Column(
-                            children: [
-                              Text('photo'),
-                              ElevatedButton(onPressed: (){
-                                openAppSettings();
-                              }, child: Text(
-                                  '前往设置页面打开权限'
-                              ))
-                            ],
-                          ),);
+                          Get.dialog(Container(
+                            child: Column(
+                              children: [
+                                Text('您似乎拒绝了应用读取相册的系统权限。'),
+                                ElevatedButton(onPressed: (){
+                                  openAppSettings();
+                                }, child: Text(
+                                    '前往设置页面打开权限'
+                                ))
+                              ],
+                            ),
+                          ));
                         }
                         /*if (await Permission.manageExternalStorage.isDenied) {
             print('externalStorageDenied');
               openAppSettings();
             }*/
                         else if (await Permission.mediaLibrary.isDenied) {
-                          Get.dialog(Column(
-                            children: [
-                              Text('mediaLib'),
-                              ElevatedButton(onPressed: (){
-                                openAppSettings();
-                              }, child: Text(
-                                  '前往设置页面打开权限'
-                              ))
-                            ],
-                          ),);
+                          Get.dialog(Container(
+                            child: Column(
+                              children: [
+                                Text('您似乎拒绝了应用读取媒体库的系统权限。'),
+                                ElevatedButton(onPressed: (){
+                                  openAppSettings();
+                                }, child: Text(
+                                    '前往设置页面打开权限'
+                                ))
+                              ],
+                            ),
+                          ));
                           print('mediaLibDenied_ios');
                           openAppSettings();
                         }
@@ -409,66 +417,72 @@ class _diaryState extends State<diary> {
       ),
       floatingActionButton: FloatingActionButton(
         shape: StadiumBorder(),
-        onPressed: () {
-          (() async {
-            Map<Permission, PermissionStatus> statuses = await [
-              Permission.storage,
-              Permission.photos,
-              //Permission.manageExternalStorage,
-              Permission.mediaLibrary,
-            ].request();
-            if (await Permission.storage.isDenied) {
-              Get.dialog(Column(
-                children: [
-                  Text('storage'),
-                  ElevatedButton(onPressed: (){
-                    openAppSettings();
-                  }, child: Text(
-                    '前往设置页面打开权限'
-                  ))
-                ],
-              ),);
-              print('storageDenied');
 
-            }
-            else if (await Permission.photos.isDenied) {
+
+
+
+
+        onPressed: () async {
+          Map<Permission, PermissionStatus> statuses = await [
+            Permission.storage,
+            Permission.photos,
+            //Permission.manageExternalStorage,
+            Permission.mediaLibrary,
+          ].request();
+          if (await Permission.storage.isPermanentlyDenied) {
+            Get.dialog(
+                Container(
+                  child: Column(
+                    children: [
+                      Text('您似乎拒绝了应用读写外部存储的系统权限。'),
+                      ElevatedButton(onPressed: (){
+                        openAppSettings();
+                      }, child: Text(
+                          '前往设置页面打开权限'
+                      ))
+                    ],
+                  ),
+                )
+            );
+            print('storageDenied');
+
+          }
+          else if (await Permission.photos.isDenied) {
             print('photoDenied');
-            Get.dialog(Column(
-              children: [
-                Text('photo'),
-                ElevatedButton(onPressed: (){
-                  openAppSettings();
-                }, child: Text(
-                    '前往设置页面打开权限'
-                ))
-              ],
-            ),);
-            }
-            /*if (await Permission.manageExternalStorage.isDenied) {
-            print('externalStorageDenied');
-              openAppSettings();
-            }*/
-            else if (await Permission.mediaLibrary.isDenied) {
-              Get.dialog(Column(
+            Get.dialog(Container(
+              child: Column(
                 children: [
-                  Text('mediaLib'),
+                  Text('您似乎拒绝了应用读取相册的系统权限。'),
                   ElevatedButton(onPressed: (){
                     openAppSettings();
                   }, child: Text(
                       '前往设置页面打开权限'
                   ))
                 ],
-              ),);
-              print('mediaLibDenied_ios');
+              ),
+            ));
+          }
+          /*if (await Permission.manageExternalStorage.isDenied) {
+            print('externalStorageDenied');
               openAppSettings();
-            }
-            else Get.to(diary_type_select());
-            print(statuses[Permission.storage]);
-            print(statuses[Permission.photos]);
-            print(statuses[Permission.manageExternalStorage]);
-            print(statuses[Permission.mediaLibrary]);
-
-          });
+            }*/
+          else if (await Permission.mediaLibrary.isDenied) {
+            Get.dialog(Container(
+              child: Column(
+                children: [
+                  Text('您似乎拒绝了应用读取媒体库的系统权限。'),
+                  ElevatedButton(onPressed: (){
+                    openAppSettings();
+                  }, child: Text(
+                      '前往设置页面打开权限'
+                  ))
+                ],
+              ),
+            ));
+            print('mediaLibDenied_ios');
+            openAppSettings();
+          }
+          else Get.to(diary_type_select());
         },
         child: Icon(Icons.add),
       ),

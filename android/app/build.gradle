@@ -1,8 +1,14 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
+    id 'kotlin-kapt'
     id "dev.flutter.flutter-gradle-plugin"
 }
+
+/*apply {
+    from("../resolve_dependencies.gradle")
+}*/
+
 
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')

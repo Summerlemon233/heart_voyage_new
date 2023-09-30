@@ -152,7 +152,14 @@ class _change_avatar_registerState extends State<change_avatar_register> {
                                 .headlineSmall,
                           )),
                 )),
-            ElevatedButton(
+        Container(
+          padding: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width * 0.25,
+              10,
+              MediaQuery.of(context).size.width * 0.25,
+              10),
+          child: Center(
+            child: ElevatedButton(
                 style: ButtonStyle(
                     foregroundColor:
                     MaterialStateProperty.all(Colors.white),
@@ -184,6 +191,10 @@ class _change_avatar_registerState extends State<change_avatar_register> {
                     ),
                   ],
                 )),
+          ),
+        ),
+
+
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.03,
             ),

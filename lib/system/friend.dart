@@ -17,7 +17,7 @@ class friend extends StatefulWidget {
 }
 
 class _friendState extends State<friend> {
-  bool _isSelectedAvatar = !(PhotoPath_avatar[0] == "");
+  bool _isSelectedAvatar = (PhotoPath_avatar.isNotEmpty);
   final TextEditingController _controller = TextEditingController();
   String _myCode = '';
 

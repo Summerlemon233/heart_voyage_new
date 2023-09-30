@@ -203,7 +203,7 @@ class momentCard extends StatelessWidget {
                   likeCount: likes,
                 ),
                 SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.15,
+                  width: MediaQuery.of(context).size.width * 0.08,
                 ),
                 Text(
                   "发布于 ${province}   ${releaseTime}  ",
