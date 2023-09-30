@@ -2,8 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:heart_voyage_new/pet/chat/controller/conversation.dart';
+import 'package:heart_voyage_new/pet/chat/controller/message.dart';
+import 'package:heart_voyage_new/pet/chat/controller/prompt.dart';
+import 'package:heart_voyage_new/pet/chat/controller/settings.dart';
 import 'package:heart_voyage_new/system/userdata_func.dart';
 import 'package:heart_voyage_new/tabs.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -31,9 +36,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    Get.put(SettingsController());
+    Get.put(ConversationController());
+    Get.put(MessageController());
+    Get.put(PromptController());
     return GetMaterialApp(
+      locale: const Locale('zh'),
       title: '心旅',
       builder: EasyLoading.init(),
+      debugShowCheckedModeBanner: false,
 
 
 

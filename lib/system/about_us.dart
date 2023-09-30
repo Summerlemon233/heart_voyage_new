@@ -43,7 +43,7 @@ class _about_usState extends State<about_us> {
                         ),
                         Center(
                           child: Text(
-                            "Version 1.0.0 预览版 \n2023/09/17",
+                            "Version 1.0.0 Alpha 2 \n2023/09/30",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 20, fontFamily: 'Helvetica_Neue'),

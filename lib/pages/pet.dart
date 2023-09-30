@@ -2,7 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:heart_voyage_new/pet/change_name.dart';
+import 'package:heart_voyage_new/pet/chat/pages/chat_page.dart';
+
+import 'package:heart_voyage_new/pet/chat_new.dart';
+
 import 'package:heart_voyage_new/system/friend.dart';
+
+import '../system/api_key.dart';
 
 class pet extends StatefulWidget {
   const pet({super.key});
@@ -12,6 +18,8 @@ class pet extends StatefulWidget {
 }
 
 class _petState extends State<pet> {
+
+
   String returnPetName() {
     final _nameBox = GetStorage();
     if (_nameBox.read('namePet') != null) {
@@ -68,6 +76,9 @@ class _petState extends State<pet> {
                 ],
               ),
             ),
+            Center(
+              child: Text('当前到达星球：无忧星',style: TextStyle(fontSize: 18),),
+            ),
             Container(),
             Container(),
             Container(
@@ -91,12 +102,12 @@ class _petState extends State<pet> {
               child: ElevatedButton(
                   onPressed: () {
                     setState(() {
-                      Get.to(friend());
+                      Get.to(chat());
                     });
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [Icon(Icons.message), Text("聊天")],
+                    children: [Icon(Icons.message), Text("和心宠聊天")],
                   )),
             )
           ],

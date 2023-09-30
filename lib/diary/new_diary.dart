@@ -193,7 +193,9 @@ class _new_diaryState extends State<new_diary> {
                       children: <Widget>[
                         ClipOval(
                           child: Image(
-                            image: AssetImage('assets/images/not_login.png'),
+                            image: PhotoPath_avatar.isEmpty?
+                            AssetImage('assets/images/not_login.png'):
+                            imageFromFile(PhotoPath_avatar.first).image,
                           ),
                         ),
                         Text(

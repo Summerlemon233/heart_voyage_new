@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
+
 import './change_avatar_register.dart';
-import './login.dart';
-import './userdata_func.dart';
-
-
 import './userdata.dart';
+import './userdata_func.dart';
 import 'common_image.dart';
 
 class register extends StatefulWidget {
@@ -35,12 +34,14 @@ class _registerState extends State<register> {
       "icon": Icons.wechat,
     },
   ];
+
   @override
   void initState() {
     //graphValidationInit();
     // TODO: implement initState
     super.initState();
   }
+
   /*void graphValidationInit(){
     _temp = Apifm.graphValidateCodeUrl();
     _validateKey = _temp["key"];
@@ -68,9 +69,10 @@ class _registerState extends State<register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(229, 220, 203, 1),
+      backgroundColor: Color.fromARGB(255, 252, 223, 215),
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(45, 73, 104, 1),
+        //title: Text('关于心协'),
+        backgroundColor: Color.fromARGB(255, 255, 189, 177),
         foregroundColor: Colors.white,
         title: const Text("注册"),
       ),
@@ -93,8 +95,6 @@ class _registerState extends State<register> {
             buildPasswordTextField(context), // 输入密码
             const SizedBox(height: 30),
             buildConfirmPasswordTextField(context), // 确认密码
-
-
 
             const SizedBox(height: 30),
             const SizedBox(height: 60),
@@ -137,15 +137,17 @@ class _registerState extends State<register> {
         child: ElevatedButton(
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all(Colors.white),
-              backgroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 73, 104, 1),),
+              backgroundColor: MaterialStateProperty.all(
+                Color.fromARGB(255, 255, 189, 177),
+              ),
               // 设置圆角
               shape: MaterialStateProperty.all(const StadiumBorder(
-
                   side: BorderSide(style: BorderStyle.none)))),
-          child:
-          Text('注册', style: Theme.of(context).primaryTextTheme.headlineSmall,),
-
-          onPressed: () {
+          child: Text(
+            '注册',
+            style: Theme.of(context).primaryTextTheme.headlineSmall,
+          ),
+          onPressed: () async {
             _emailReg = _controllerMail.text;
             _userNameReg = _controllerName.text;
             if (_controllerPwd.text != _controllerRePwd.text) {
@@ -168,8 +170,64 @@ class _registerState extends State<register> {
               //print(SharedPreferenceUtil.checkUser(userReg));
               if (/*IO_Data.checkUser(userReg)==  */ true) {
                 print('signin_success');
+                Map<Permission, PermissionStatus> statuses = await [
+                  Permission.storage,
+                  Permission.photos,
+                  //Permission.manageExternalStorage,
+                  Permission.mediaLibrary,
+                ].request();
+                if (await Permission.storage.isPermanentlyDenied) {
+                  Get.dialog(
+                    Column(
+                      children: [
+                        Text('storage'),
+                        ElevatedButton(
+                            onPressed: () {
+                              openAppSettings();
+                            },
+                            child: Text('请前往设置页面打开存储权限。'))
+                      ],
+                    ),
+                  );
+                  print('storageDenied');
+                } else if (await Permission.photos.isDenied) {
+                  print('photoDenied');
+                  Get.dialog(
+                    Column(
+                      children: [
+                        Text('photo'),
+                        ElevatedButton(
+                            onPressed: () {
+                              openAppSettings();
+                            },
+                            child: Text('请前往设置页面打开照片读取权限，以上传您的头像。'))
+                      ],
+                    ),
+                  );
+                }
+                /*if (await Permission.manageExternalStorage.isDenied) {
+            print('externalStorageDenied');
+              openAppSettings();
+            }*/
+                else if (await Permission.mediaLibrary.isDenied) {
+                  Get.dialog(
+                    Column(
+                      children: [
+                        Text('mediaLib'),
+                        ElevatedButton(
+                            onPressed: () {
+                              openAppSettings();
+                            },
+                            child: Text('请前往设置页面打开媒体库权限，以上传头像。'))
+                      ],
+                    ),
+                  );
+                  print('mediaLibDenied_ios');
+                  openAppSettings();
+                }
                 Future.delayed(Duration(milliseconds: 10), () {
                   selectedAsset_avatar = null;
+                  print(PhotoPath_avatar.value);
                   Get.to(change_avatar_register());
                 });
               }
@@ -196,7 +254,8 @@ class _registerState extends State<register> {
           return null;
         },
         decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30))),
             labelText: "密码",
             suffixIcon: IconButton(
               icon: Icon(
@@ -230,7 +289,8 @@ class _registerState extends State<register> {
           return null;
         },
         decoration: InputDecoration(
-            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(30))),
             labelText: "确认密码",
             suffixIcon: IconButton(
               icon: Icon(
@@ -255,8 +315,11 @@ class _registerState extends State<register> {
         fontFamily: "Helvetica_Neue",
       ),
       controller: _controllerMail,
-      decoration: const InputDecoration(labelText: '手机号',
-        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),),
+      decoration: const InputDecoration(
+        labelText: '手机号',
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+      ),
       validator: (v) {
         var mobileReg = RegExp(
             "^((13[0-9])|(15[^4])|(166)|(17[0-8])|(18[0-9])|(19[8-9])|(147,145))\\d{8}\$");
@@ -275,8 +338,11 @@ class _registerState extends State<register> {
         fontFamily: "Helvetica_Neue",
       ),
       controller: _controllerMail,
-      decoration: const InputDecoration(labelText: '邮箱地址',
-        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),),
+      decoration: const InputDecoration(
+        labelText: '邮箱地址',
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+      ),
       validator: (v) {
         var emailReg = RegExp(
             r"[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?");
@@ -295,8 +361,11 @@ class _registerState extends State<register> {
         fontFamily: "Helvetica_Neue",
       ),
       controller: _controllerName,
-      decoration: const InputDecoration(labelText: '用户名',
-        border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(30))),),
+      decoration: const InputDecoration(
+        labelText: '用户名',
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+      ),
       validator: (v) {
         if (v!.isEmpty) {
           return '请输入正确的用户名';
@@ -306,8 +375,6 @@ class _registerState extends State<register> {
       onSaved: (v) => _userNameReg = v!,
     );
   }
-
-
 }
 
 //   TextEditingController _controllerMail = new TextEditingController();
@@ -324,5 +391,3 @@ class _registerState extends State<register> {
 //         Navigator.pop(context);//返回到登陆页面
 //       }
 //   }
-
-

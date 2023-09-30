@@ -24,7 +24,7 @@ var diarySelectRes = false.obs;
 // 定义一个全局变量，用于存储照片路径
 List<String> photoPath = [];
 var photoPath_diary = [].obs;
-List<String> PhotoPath_avatar = [""];
+var PhotoPath_avatar = [].obs;
 
 // 将照片路径List存入本地：
 
@@ -37,7 +37,7 @@ Future<void> savePhotoPath(List<String> filePaths) async {
 
 Future<void> readPhotoPath() async {
   //photoPath = [];
-  if(GetStorage().read('photoPath') == null) return;
+  if (GetStorage().read('photoPath') == null) return;
   final filePath = GetStorage().read('photoPath');
   final File file = File(filePath);
   final content = await file.readAsString();
@@ -54,7 +54,7 @@ Future<void> savePhotoPath_mood(List filePaths) async {
 }
 
 Future<void> readPhotoPath_mood() async {
-  if(GetStorage().read('photoPath_mood') == null) return;
+  if (GetStorage().read('photoPath_mood') == null) return;
   final filePath = GetStorage().read('photoPath_mood');
   final File file = File(filePath);
   final content = await file.readAsString();
@@ -94,8 +94,8 @@ Future<bool> selectPhoto_mood(BuildContext context, int index) async {
     selectedAsset_mood = result.first;
     savePhoto_mood(index);
     return true;
-  }
-  else return false;
+  } else
+    return false;
 }
 
 // 定义一个方法，用于将选中的照片自命名以后写入设备内置目录，并添加文件路径到photoPath变量
@@ -142,7 +142,7 @@ Image imageFromFile(String path) {
   }
 }
 
-Future<void> savePhotoPath_avatar(List<String> filePaths) async {
+Future<void> savePhotoPath_avatar(List filePaths) async {
   final directory = await getApplicationDocumentsDirectory();
   final File file = File('${directory.path}/PhotoPath_avatars.txt');
   await file.writeAsString(filePaths.join('\n'));
@@ -151,9 +151,10 @@ Future<void> savePhotoPath_avatar(List<String> filePaths) async {
 
 Future<void> readPhotoPath_avatar() async {
   final filePath = GetStorage().read('PhotoPath_avatar');
+  if (filePath == null) return;
   final File file = File(filePath);
   final content = await file.readAsString();
-  PhotoPath_avatar = content.split('\n');
+  PhotoPath_avatar.value = content.split('\n');
 }
 
 Future<void> selectPhoto_avatar(BuildContext context) async {
@@ -188,7 +189,7 @@ Future<void> savePhoto_avatar(int index) async {
     uiSettings: [
       AndroidUiSettings(
           toolbarTitle: '裁剪头像',
-          toolbarColor:  Color.fromRGBO(45, 73, 104, 1),
+          toolbarColor: Color.fromRGBO(45, 73, 104, 1),
           toolbarWidgetColor: Colors.white,
           initAspectRatio: CropAspectRatioPreset.original,
           lockAspectRatio: true),
@@ -206,7 +207,10 @@ Future<void> savePhoto_avatar(int index) async {
   final fileName = basename(file!.path);
   final newFile = File('$path/$fileName');
   await file.copy(newFile.path);
-  PhotoPath_avatar[0] = (newFile.path);
+  if (PhotoPath_avatar.isNotEmpty) {
+    PhotoPath_avatar.removeLast();
+  }
+  PhotoPath_avatar.add(newFile.path);
   savePhotoPath_avatar(PhotoPath_avatar);
 }
 

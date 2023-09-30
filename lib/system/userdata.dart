@@ -52,6 +52,8 @@ Map<String,dynamic> basicData = {
   'motto':'这个人很懒，没有留下个性签名'
 }.obs;
 
+var isLogin = false.obs;
+
 //存储“我的星星”部分的数据，限定最高存储10条。
 
 void refreshStarData()

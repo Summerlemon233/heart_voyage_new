@@ -11,12 +11,12 @@ class _XINXIEState extends State<XINXIE> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(229, 220, 203, 1),
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(45, 73, 104, 1),
-        foregroundColor: Colors.white,
-        title: Text('详细信息'),
-      ),
+        backgroundColor: Color.fromARGB(255, 252, 223, 215),
+        appBar: AppBar(
+          title: Text('关于心协'),
+          backgroundColor: Color.fromARGB(255, 255, 189, 177),
+          foregroundColor: Colors.white,
+        ),
       body: ListView(
         children: [Container(
 

@@ -6,6 +6,7 @@ import 'package:heart_voyage_new/system/common_image.dart';
 import 'package:heart_voyage_new/system/common_widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../diary/diary_type_select.dart';
 import '../system/showdata.dart';
 import '../system/userdata.dart';
 import '../system/userdata_func.dart';
@@ -140,7 +141,7 @@ class _diaryState extends State<diary> {
                           print('mediaLibDenied_ios');
                           openAppSettings();
                         }
-                        else Get.to(new_diary());
+                        else Get.to(diary_type_select());
                       },
                       child: Icon(Icons.add)),
                 ],
@@ -409,7 +410,7 @@ class _diaryState extends State<diary> {
       floatingActionButton: FloatingActionButton(
         shape: StadiumBorder(),
         onPressed: () {
-          setState(() async {
+          (() async {
             Map<Permission, PermissionStatus> statuses = await [
               Permission.storage,
               Permission.photos,
@@ -461,7 +462,7 @@ class _diaryState extends State<diary> {
               print('mediaLibDenied_ios');
               openAppSettings();
             }
-            else Get.to(new_diary());
+            else Get.to(diary_type_select());
             print(statuses[Permission.storage]);
             print(statuses[Permission.photos]);
             print(statuses[Permission.manageExternalStorage]);

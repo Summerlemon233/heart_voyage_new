@@ -25,7 +25,7 @@ class _AvatarState extends State<Avatar> {
       child: Container(
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: Colors.blue),
+          border: Border.all(color: Colors.white ),
         ),
         child: CircleAvatar(
           backgroundImage: widget.image,

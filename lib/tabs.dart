@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:heart_voyage_new/pages/diary.dart';
 import 'package:heart_voyage_new/pages/meditation.dart';
 import 'package:heart_voyage_new/pages/pet.dart';
@@ -10,6 +11,8 @@ import 'package:heart_voyage_new/system/userdata_func.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 import 'pages/map.dart';
+import 'system/login.dart';
+import 'system/userdata.dart';
 
 class tabs extends StatefulWidget {
   const tabs({super.key});
@@ -22,6 +25,14 @@ class _tabsState extends State<tabs> {
   @override
   void initState() {
     initializeDateFormatting();
+    loadBasicData();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      final _loginStateValidator = GetStorage();
+      if(_loginStateValidator.read('isLogin') == null || _loginStateValidator.read('isLogin') == false)
+      {
+        Get.offAll(login());
+      }
+    });
 
     super.initState();
   }

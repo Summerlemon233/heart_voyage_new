@@ -1,12 +1,15 @@
 //import 'package:cloudbase_null_safety/cloudbase_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import '../tabs.dart';
 import './forgotpswd.dart';
 import './register.dart';
 import './userdata.dart';
 import './userdata_func.dart';
 import 'dart:core';
+
+import 'common_image.dart';
 
 class login extends StatefulWidget {
   const login({Key? key}) : super(key: key);
@@ -16,6 +19,7 @@ class login extends StatefulWidget {
 }
 
 class _loginState extends State<login> {
+  final _loginStateValidator = GetStorage();
   final GlobalKey _formKey = GlobalKey<FormState>();
   late String _loginEmail, _loginPassword;
   bool _isObscure = true;
@@ -35,9 +39,10 @@ class _loginState extends State<login> {
       Get.to(login());
     }*/
     return Scaffold(
-      backgroundColor: Color.fromRGBO(229, 220, 203, 1),
+      backgroundColor: Color.fromARGB(255, 252, 223, 215),
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(45, 73, 104, 1),
+        //title: Text('关于心协'),
+        backgroundColor: Color.fromARGB(255, 255, 189, 177),
         foregroundColor: Colors.white,
         title: const Text("登录"),
       ),
@@ -47,9 +52,26 @@ class _loginState extends State<login> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           children: [
-            const SizedBox(height: kToolbarHeight), // 距离顶部一个工具栏的高度
+            const SizedBox(height: 20), // 距离顶部一个工具栏的高度
             buildTitle(), // Login
-            buildTitleLine(), // Login下面的下划线
+            buildTitleLine(),
+            SizedBox(height: 10),
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Image.asset('assets/images/rabbit.png'),
+                  SizedBox(height: 120,child: Obx(() => PhotoPath_avatar.isNotEmpty
+                      ? ClipOval(
+                    child: Image(
+                      image: imageFromFile(PhotoPath_avatar.first).image,
+                    ),
+                  )
+                      : SizedBox()),)
+                ],
+              ),
+              height: 180,
+            ), // Login下面的下划线
             const SizedBox(height: 60),
             buildEmailTextField(), // 输入邮箱
             const SizedBox(height: 30),
@@ -76,7 +98,8 @@ class _loginState extends State<login> {
         child: ElevatedButton(
           style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all(Colors.white),
-            backgroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 73, 104, 1),),
+            backgroundColor:
+                MaterialStateProperty.all(Color.fromARGB(255, 255, 189, 177)),
             // 设置圆角
             shape: MaterialStateProperty.all(
                 const StadiumBorder(side: BorderSide(style: BorderStyle.none))),
@@ -158,14 +181,16 @@ class _loginState extends State<login> {
         width: 270,
         child: ElevatedButton(
           style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all(Colors.white),
-              backgroundColor: MaterialStateProperty.all(Color.fromRGBO(45, 73, 104, 1),),
+              foregroundColor: MaterialStateProperty.all(Colors.white),
+              backgroundColor:
+                  MaterialStateProperty.all(Color.fromARGB(255, 255, 189, 177)),
               // 设置圆角
               shape: MaterialStateProperty.all(const StadiumBorder(
-
                   side: BorderSide(style: BorderStyle.none)))),
-          child:
-              Text('登录', style: Theme.of(context).primaryTextTheme.headlineSmall,),
+          child: Text(
+            '登录',
+            style: Theme.of(context).primaryTextTheme.headlineSmall,
+          ),
           onPressed: () {
             setState(() {
               // 表单校验通过才会继续执行
@@ -177,10 +202,12 @@ class _loginState extends State<login> {
                 if (_loginEmail == basicData['email'] &&
                     _loginPassword == basicData['password']) {
                   basicData['isLogin'] = true;
-                  print("${basicData['isLogin']}");
+
+                  /*print("${basicData['isLogin']}");*/
                   saveBasicData();
-                  print("${basicData['isLogin']}");
-                  print('loginsuccess');
+                  /*print("${basicData['isLogin']}");
+                  print('loginsuccess');*/
+                  _loginStateValidator.write('isLogin', true);
                   Get.snackbar('提示', '登录成功！即将返回主页面。');
                   Future.delayed(Duration(seconds: 2), () {
                     Get.offAll(tabs());
